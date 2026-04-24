@@ -2,7 +2,7 @@
 
 client_id = "1da7f7414bb13cf046e5379331399154"
 name = "CrossCurrency - Explified"
-application_url = "https://currency-switcher-explified.vercel.app"
+application_url = "https://cross-currency.vercel.app"
 embedded = true
 
 [webhooks]
@@ -23,7 +23,7 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://currency-switcher-explified.vercel.app/auth/callback" ]
+redirect_urls = [ "https://cross-currency.vercel.app/auth/callback" ]
 
 [build]
 automatically_update_urls_on_dev = true

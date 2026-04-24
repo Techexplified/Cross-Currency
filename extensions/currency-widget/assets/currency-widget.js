@@ -2,7 +2,7 @@
   "use strict";
 
   /* ================= CONFIG ================= */
-  const API_HOST = "https://currency-switcher-explified.vercel.app";
+  const API_HOST = "https://cross-currency.vercel.app";
   const PICK = "__mlv_currency_picker_v2";
   const MENU = "__mlv_currency_menu_v2";
   const KEY = "mlv_currency_choice_v2";
