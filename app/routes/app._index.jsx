@@ -1,7 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import world from "@svg-maps/world";
-import bounds from "svg-path-bounds";
 
 /* -------------------------------------------------
    CONSTANTS
@@ -41,81 +39,15 @@ const DISPLAY_CURRENCIES = [
   "SGD",
 ].map((code) => ({ code, ...CURRENCY_META[code] }));
 
-const BADGE_TO_ISO2 = {
-  US: "US",
-  CA: "CA",
-  GB: "GB",
-  IN: "IN",
-  AU: "AU",
-  JP: "JP",
-  CN: "CN",
-  MX: "MX",
-  BR: "BR",
-  CH: "CH",
-  SG: "SG",
-  // EU is not a country in the world svg map → fallback to text
-  EU: null,
-};
-
-function CountryMapIcon({ iso, size = 18, className = "" }) {
-  const iso2 = (BADGE_TO_ISO2[iso] ?? iso)?.toLowerCase();
-  if (!iso2) return null;
-
-  const location = world.locations?.find((l) => l.id === iso2);
-  const d = location?.path;
-  if (!d) return null;
-
-  let viewBox = "0 0 24 24";
-  try {
-    const [minX, minY, maxX, maxY] = bounds(d);
-    const pad = Math.max((maxX - minX) * 0.08, (maxY - minY) * 0.08, 6);
-    const x = minX - pad;
-    const y = minY - pad;
-    const w = (maxX - minX) + pad * 2;
-    const h = (maxY - minY) + pad * 2;
-    viewBox = `${x} ${y} ${w} ${h}`;
-  } catch {
-    // If bounds parsing fails for any reason, fall back to the full map viewBox.
-    viewBox = world.viewBox || viewBox;
-  }
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={viewBox}
-      aria-hidden="true"
-      focusable="false"
-      className={className}
-    >
-      <path d={d} fill="currentColor" />
-    </svg>
-  );
-}
-
-CountryMapIcon.propTypes = {
-  iso: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  className: PropTypes.string,
-};
-
 function CurrencyBadge({ code, size = "md" }) {
   const badge = CURRENCY_META[code]?.badge ?? code.slice(0, 2);
   const classes = size === "sm" ? "w-5 h-5 text-[11px]" : "w-6 h-6 text-[12px]";
-  const hasMap = Boolean(
-    world.locations?.some(
-      (l) => l.id === (BADGE_TO_ISO2[badge] ?? badge).toLowerCase(),
-    ),
-  );
 
   return (
     <span
       className={`inline-flex items-center justify-center ${classes} rounded bg-white border border-gray-200 font-semibold text-gray-700`}
     >
-      <span className="text-gray-700">
-        <CountryMapIcon iso={badge} size={size === "sm" ? 14 : 16} className="text-gray-700" />
-      </span>
-      {!hasMap ? badge : null}
+      {badge}
     </span>
   );
 }
