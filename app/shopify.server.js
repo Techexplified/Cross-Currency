@@ -25,12 +25,21 @@ function requiredEnv() {
 
 function assertShopifyEnv() {
   const missing = requiredEnv().filter((k) => !process.env[k]);
-  if (missing.length) throw new MissingShopifyEnvError(missing);
+  if (missing.length) {
+    // #region agent log
+    fetch('http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2b802f'},body:JSON.stringify({sessionId:'2b802f',runId:'pre-fix',hypothesisId:'H1',location:'shopify.server.js:assertShopifyEnv:missing',message:'Missing required Shopify env vars',data:{missing,nodeEnv:process.env.NODE_ENV||'',hasDatabaseUrl:Boolean(process.env.DATABASE_URL)},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+    throw new MissingShopifyEnvError(missing);
+  }
 }
 
 let _shopify;
 export function getShopify() {
   if (_shopify) return _shopify;
+
+  // #region agent log
+  fetch('http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2b802f'},body:JSON.stringify({sessionId:'2b802f',runId:'pre-fix',hypothesisId:'H3',location:'shopify.server.js:getShopify:start',message:'Initializing Shopify app (first call)',data:{nodeVersion:process.version,nodeEnv:process.env.NODE_ENV||''},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
 
   assertShopifyEnv();
 

@@ -13,6 +13,9 @@ export default async function handleRequest(
   reactRouterContext,
 ) {
   const __agentReqT0 = Date.now();
+  // #region agent log
+  fetch('http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2b802f'},body:JSON.stringify({sessionId:'2b802f',runId:'pre-fix',hypothesisId:'H4',location:'entry.server.jsx:handleRequest:begin',message:'SSR handleRequest begin',data:{url:String(request?.url||''),nodeVersion:process.version},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
   try {
     const __u = new URL(request.url);
     // #region agent log
@@ -44,6 +47,9 @@ export default async function handleRequest(
     const { addDocumentResponseHeaders } = await import("./shopify.server.js");
     addDocumentResponseHeaders(request, responseHeaders);
   } catch (err) {
+    // #region agent log
+    fetch('http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2b802f'},body:JSON.stringify({sessionId:'2b802f',runId:'pre-fix',hypothesisId:'H1',location:'entry.server.jsx:shopifyHeaders:catch',message:'Failed to add Shopify document headers',data:{errName:err?.name||'',errMsg:String(err?.message||err).slice(0,200)},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
     console.warn(
       "WARN entry.server: skipping Shopify document headers:",
       String(err),
@@ -137,6 +143,9 @@ export default async function handleRequest(
         },
         onError(error) {
           responseStatusCode = 500;
+          // #region agent log
+          fetch('http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2b802f'},body:JSON.stringify({sessionId:'2b802f',runId:'pre-fix',hypothesisId:'H5',location:'entry.server.jsx:onError',message:'React SSR onError',data:{name:error?.name||'',msg:String(error?.message||error).slice(0,200)},timestamp:Date.now()})}).catch(()=>{});
+          // #endregion
           console.error(error);
         },
       },
