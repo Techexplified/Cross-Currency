@@ -6,26 +6,6 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
    GET → loader
 ------------------------------ */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const __t0 = Date.now();
-  // #region agent log
-  fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "7ed33c",
-    },
-    body: JSON.stringify({
-      sessionId: "7ed33c",
-      runId: "pre-fix",
-      hypothesisId: "H3",
-      location: "api.merchant-settings.ts:loader:start",
-      message: "merchant-settings loader start",
-      data: {},
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
   let session;
 
   try {
@@ -40,47 +20,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const shop = session.shop;
 
-  // #region agent log
-  fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "7ed33c",
-    },
-    body: JSON.stringify({
-      sessionId: "7ed33c",
-      runId: "pre-fix",
-      hypothesisId: "H3",
-      location: "api.merchant-settings.ts:after-auth",
-      message: "merchant-settings after authenticate",
-      data: { ms: Date.now() - __t0, shopLen: shop?.length ?? 0 },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
   const settings = await prisma.merchantSettings.findUnique({
     where: { shop },
   });
-
-  // #region agent log
-  fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "7ed33c",
-    },
-    body: JSON.stringify({
-      sessionId: "7ed33c",
-      runId: "pre-fix",
-      hypothesisId: "H3",
-      location: "api.merchant-settings.ts:after-prisma",
-      message: "merchant-settings after prisma",
-      data: { ms: Date.now() - __t0, hasRow: settings != null },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 
   return new Response(
     JSON.stringify({ data: settings }),

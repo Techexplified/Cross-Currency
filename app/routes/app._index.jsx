@@ -769,26 +769,6 @@ export default function SettingsRoute() {
   // load settings
   useEffect(() => {
     (async () => {
-      const __t0 = Date.now();
-      let __status = 0;
-      // #region agent log
-      fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Debug-Session-Id": "7ed33c",
-        },
-        body: JSON.stringify({
-          sessionId: "7ed33c",
-          runId: "pre-fix",
-          hypothesisId: "H3",
-          location: "app._index.jsx:merchant-fetch:start",
-          message: "client fetch merchant-settings start",
-          data: {},
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
       try {
         const res = await fetch("/api/merchant-settings", {
           method: "GET",
@@ -796,8 +776,6 @@ export default function SettingsRoute() {
             Accept: "application/json",
           },
         });
-
-        __status = res.status;
         if (!res.ok) {
           throw new Error(`Failed to load: ${res.status}`);
         }
@@ -836,24 +814,6 @@ export default function SettingsRoute() {
           distanceLeft: 16,
         });
       } finally {
-        // #region agent log
-        fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Debug-Session-Id": "7ed33c",
-          },
-          body: JSON.stringify({
-            sessionId: "7ed33c",
-            runId: "pre-fix",
-            hypothesisId: "H3",
-            location: "app._index.jsx:merchant-fetch:finally",
-            message: "client fetch merchant-settings finished",
-            data: { ms: Date.now() - __t0, httpStatus: __status },
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        // #endregion
         setLoading(false);
       }
     })();
