@@ -1,5 +1,4 @@
 import { redirect, Form, useLoaderData } from "react-router";
-import { login } from "../../shopify.server";
 import styles from "./styles.module.css";
 
 export const loader = async ({ request }) => {
@@ -9,11 +8,17 @@ export const loader = async ({ request }) => {
     throw redirect(`/app?${url.searchParams.toString()}`);
   }
 
-  return { showForm: Boolean(login) };
+  // Avoid importing Shopify server code when env is missing (common on Vercel previews).
+  try {
+    const { login } = await import("../../shopify.server.js");
+    return { showForm: Boolean(login), envError: null };
+  } catch (err) {
+    return { showForm: false, envError: String(err?.message || err) };
+  }
 };
 
 export default function App() {
-  const { showForm } = useLoaderData();
+  const { showForm, envError } = useLoaderData();
 
   return (
     <div className={styles.index}>
@@ -22,6 +27,11 @@ export default function App() {
         <p className={styles.text}>
           A tagline about [your app] that describes your value proposition.
         </p>
+        {envError && (
+          <p className={styles.text}>
+            <strong>Server config error:</strong> {envError}
+          </p>
+        )}
         {showForm && (
           <Form className={styles.form} method="post" action="/auth/login">
             <label className={styles.label}>

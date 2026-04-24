@@ -3,7 +3,6 @@ import { renderToPipeableStream } from "react-dom/server";
 import { ServerRouter } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
-import { addDocumentResponseHeaders } from "./shopify.server";
 
 export const streamTimeout = 5000;
 
@@ -38,8 +37,18 @@ export default async function handleRequest(
     /* ignore */
   }
 
-  // Add document response headers (Shopify-specific)
-  addDocumentResponseHeaders(request, responseHeaders);
+  // Add document response headers (Shopify-specific).
+  // This must be resilient in misconfigured deploys (e.g. missing env vars),
+  // otherwise Vercel may report "Serverless Function has crashed".
+  try {
+    const { addDocumentResponseHeaders } = await import("./shopify.server.js");
+    addDocumentResponseHeaders(request, responseHeaders);
+  } catch (err) {
+    console.warn(
+      "WARN entry.server: skipping Shopify document headers:",
+      String(err),
+    );
+  }
 
   // --- DIAGNOSTIC LOGGING (safe, no secret values printed) ---
   try {

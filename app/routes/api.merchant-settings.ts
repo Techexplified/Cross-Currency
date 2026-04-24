@@ -1,10 +1,11 @@
 import { prisma } from "../db.server";
 import { authenticate } from "../shopify.server";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 
 /* -----------------------------
    GET → loader
 ------------------------------ */
-export async function loader({ request }) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const __t0 = Date.now();
   // #region agent log
   fetch("http://127.0.0.1:7780/ingest/d17002be-fcef-4dff-8e87-98a28dbcefc1", {
@@ -90,7 +91,7 @@ export async function loader({ request }) {
 /* -----------------------------
    POST → action
 ------------------------------ */
-export async function action({ request }) {
+export async function action({ request }: ActionFunctionArgs) {
   let session;
 
   try {
@@ -117,7 +118,7 @@ export async function action({ request }) {
   } = body;
 
   // ✅ Build data conditionally
-  const data = {
+  const data: any = {
     selectedCurrencies: currencies,
     defaultCurrency,
     baseCurrency,
